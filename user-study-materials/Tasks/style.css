@@ -1,0 +1,72 @@
+body {
+    background-color: #000;
+}
+pre {
+    padding: 8px;
+}
+.description {
+    color: rgb(220, 220, 220);
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 1em;
+    max-width: 600px !important;
+}
+.description > div {
+    display: block;
+    max-width: 60vw !important;
+    color: rgb(220, 220, 220) !important;
+    background-color: initial;
+}
+.code-covered {
+    background-color: #3CB371;
+}
+.c-notcovered {
+    background-color: #bb2222;
+}
+.uncovered {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+.covered {
+    background-color: rgba(0, 255, 0, 0.4);
+}
+.partiallycovered {
+    background-color: rgba(255, 255, 150, 0.4);
+}
+.promise {
+    border-style: dashed;
+    border-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-color: yellow;
+}
+div {
+    background-color: yellow;
+    padding: 20px;
+    display: none;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+.tooltip .tooltiptext {
+    visibility: hidden;
+    /*width: 120px;*/
+    background-color: rgba(255, 255, 155, 0.793);
+    color: #000;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+.large {
+    font-size: x-large;
+}
+.small {
+    font-size: small;
+}

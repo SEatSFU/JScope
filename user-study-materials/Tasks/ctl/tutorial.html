@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+        <link rel="stylesheet" href="../style.css">
+
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="description">
+                    <div>
+                        <span class="large"><b>Playground.</b></span>
+                        <p>
+                            This is a sample code for you to play around and understand what the elements(colors, messages, highlighted lines) in this report do. 
+                            Scroll and hover your mouse on the elements. Try to understand what they do, how they work, and what they mean.
+                        </p>
+                        <p>
+                            Do not hesitate to ask about anything. <br/> Ask to start with the tasks whenever you feel comfortable using the tool.
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <font size="+1">
+                    <?prettify linenums=1?>
+                    <pre class="prettyprint" lang-js>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> const deleteDir = async (dirname, options = {}) => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     return new Promise((resolve, reject) => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         rimraf(dirname, { ...options, glob: false }, err => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         if (err) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>             reject(err);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         } else {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>             resolve();
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         });
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     })
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> const deleteEmpty = (cwd, options, cb) => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     <span title="if path not taken" class = "nocode" style="background-color: rgba(255, 255, 100, 0.71); color:black">if (typeof cwd !== 'string')</span> {
+<span class="c-notcovered">&nbsp;&nbsp;&nbsp;</span>        <span title="statement not covered" style="background-color: rgba(255, 0, 0, .5)">return Promise.reject(new TypeError('expected the first argument to be a string'));</span>
+<span class="c-notcovered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     if (typeof options === 'function') {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>        cb = options;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>        options = null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     if (typeof cb === 'function') {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>        return deleteEmpty(cwd, options)
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>            .then(res => cb(null, res))
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>            .catch(cb);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     const opts = options || {};
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     const dir = path.resolve(cwd);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     if (isEmpty(dir, opts)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         let files = await readdir(dir);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         await deleteFiles(dir, opts);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     return remove(dirname);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };

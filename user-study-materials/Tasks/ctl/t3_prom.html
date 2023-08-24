@@ -1,0 +1,399 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+        <link rel="stylesheet" href="../style.css">
+
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="description">
+                    <div>
+                        <span class="large"><b>Task 2.1.</b></span>
+                        <p class="large">
+                            List all <b>promises</b> you can find in the code. 
+                        </p>
+                        <p >
+                            Notice that promise constructor (i.e. <code>new Promise(...)</code>), <code>.then()</code> and <code>.catch()</code> methods, 
+                            static methods of the Promise class such as <code>Promise.resolve()</code>, and any calls to <code>async</code> functions create promises.
+                        </p>
+                        <p >
+                            Note: Provide a line of code for each promise. (You can add any extra information, such as a keyword, if necessary.)
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <font size="+1">
+                    <?prettify linenums=1?>
+                    <pre class="prettyprint" lang-js>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> /**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * Body.js
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * Body interface provides common methods for Request and Response
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import Stream, {PassThrough} from 'node:stream';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import {types, deprecate, promisify} from 'node:util';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import {Buffer} from 'node:buffer';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import Blob from 'fetch-blob';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import {FormData, formDataToBlob} from 'formdata-polyfill/esm.min.js';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import {FetchError} from './errors/fetch-error.js';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import {FetchBaseError} from './errors/base.js';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> import {isBlob, isURLSearchParameters} from './utils/is.js';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> const pipeline = promisify(Stream.pipeline);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> const INTERNALS = Symbol('Body internals');
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> /**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * Body mixin
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * Ref: https://fetch.spec.whatwg.org/#body
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * @param   Stream  body  Readable stream
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * @param   Object  opts  Response options
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * @return  Void
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> export default class Body {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	constructor(body, {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		size = 0
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	} = {}) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		let boundary = null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		if (body === null) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			// Body is undefined or null
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			body = null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		} else if (isURLSearchParameters(body)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			// Body is a URLSearchParams
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			body = Buffer.from(body.toString());
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		} else if (body instanceof FormData) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			// Body is FormData
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			body = formDataToBlob(body);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			boundary = body.type.split('=')[1];
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		} else {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			// None of the above
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			// coerce to string then buffer
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			body = Buffer.from(String(body));
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		let stream = body;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		if (Buffer.isBuffer(body)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			stream = Stream.Readable.from(body);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		} else if (isBlob(body)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			stream = Stream.Readable.from(body.stream());
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		if (body instanceof Stream) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			body.on('error', error_ => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 				const error = error_ instanceof FetchBaseError ?
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 					error_ :
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 					new FetchError(`Invalid response body while trying to fetch ${this.url}: ${error_.message}`, 'system', error_);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 				this[INTERNALS].error = error;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			});
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	get body() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return this[INTERNALS].stream;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	get bodyUsed() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return this[INTERNALS].disturbed;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	/**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * Decode response as ArrayBuffer
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * @return  Promise
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	async function arrayBuffer() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const {buffer, byteOffset, byteLength} = await consumeBody(this);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return buffer.slice(byteOffset, byteOffset + byteLength);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	async function formData() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const ct = this.headers.get('content-type');
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		if (ct.startsWith('application/x-www-form-urlencoded')) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			const formData = new FormData();
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			const parameters = new URLSearchParams(await this.text());
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			for (const [name, value] of parameters) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 				formData.append(name, value);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			return formData;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const {toFormData} = await import('./utils/multipart-parser.js');
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return toFormData(this.body, ct);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	/**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * Return raw response as Blob
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * @return Promise
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	async function blob() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const ct = (this.headers && this.headers.get('content-type')) || (this[INTERNALS].body && this[INTERNALS].body.type) || '';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const buf = await this.arrayBuffer();
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return new Blob([buf], {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			type: ct
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		});
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	/**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * Decode response as json
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * @return  Promise
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	async function json() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const buffer = await consumeBody(this);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return JSON.parse(buffer.toString());
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	/**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * Decode response as text
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * @return  Promise
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	async function text() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const buffer = await consumeBody(this);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return new TextDecoder().decode(buffer);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	/**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * Decode response as buffer (non-spec api)
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 * @return  Promise
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	 */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	function buffer() {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return consumeBody(this);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> Body.prototype.buffer = deprecate(Body.prototype.buffer, 'Please use \'response.arrayBuffer()\' instead of \'response.buffer()\'', 'node-fetch#buffer');
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> // In browsers, all properties are enumerable.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> Object.defineProperties(Body.prototype, {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	body: {enumerable: true},
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	bodyUsed: {enumerable: true},
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	arrayBuffer: {enumerable: true},
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	blob: {enumerable: true},
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	json: {enumerable: true},
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	text: {enumerable: true},
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	data: {get: deprecate(() => {},
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		'data doesn\'t exist, use json(), text(), arrayBuffer(), or body instead',
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		'https://github.com/node-fetch/node-fetch/issues/1000 (response)')}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> });
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> /**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * Consume and convert an entire Body to a Buffer.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * Ref: https://fetch.spec.whatwg.org/#concept-body-consume-body
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @return Promise
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> async function consumeBody(data) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (data[INTERNALS].disturbed) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		throw new TypeError(`body used already for: ${data.url}`);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	data[INTERNALS].disturbed = true;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (data[INTERNALS].error) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		throw data[INTERNALS].error;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	const {body} = data;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is null
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (body === null) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return Buffer.alloc(0);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	/* c8 ignore next 3 */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (!(body instanceof Stream)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return Buffer.alloc(0);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is stream
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// get ready to actually consume the body
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	const accum = [];
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	let accumBytes = 0;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	try {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		for await (const chunk of body) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			if (data.size > 0 && accumBytes + chunk.length > data.size) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 				const error = new FetchError(`content size at ${data.url} over limit: ${data.size}`, 'max-size');
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 				body.destroy(error);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 				throw error;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			accumBytes += chunk.length;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			accum.push(chunk);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	} catch (error) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		const error_ = error instanceof FetchBaseError ? error : new FetchError(`Invalid response body while trying to fetch ${data.url}: ${error.message}`, 'system', error);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		throw error_;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (body.readableEnded === true <span title="branch not covered" class = "nocode" style="background-color: rgba(255, 255, 100, 0.71); color:black">|| body._readableState.ended === true) {</span>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		try {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			if (accum.every(c => typeof c === 'string')) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 				return Buffer.from(accum.join(''));
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			return Buffer.concat(accum, accumBytes);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		} catch (error) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 			throw new FetchError(`Could not create Buffer from response body for ${data.url}: ${error.message}`, 'system', error);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	} <span title="branch not covered" class = "nocode" style="background-color: rgba(255, 255, 100, 0.71); color:black">else {</span>
+<span class="c-notcovered">&nbsp;&nbsp;&nbsp;</span> 		<span title="statement not covered" style="background-color: rgba(255, 0, 0, .5)">throw new FetchError(`Premature close of server response while trying to fetch ${data.url}`);</span>
+<span class="c-notcovered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> /**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * Clone body given Res/Req instance
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @param   Mixed   instance       Response or Request instance
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @param   String  highWaterMark  highWaterMark for both PassThrough body streams
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @return  Mixed
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> function clone(instance, highWaterMark) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	let p1;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	let p2;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	let {body} = instance[INTERNALS];
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Don't allow cloning a used body
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (instance.bodyUsed) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		throw new Error('cannot clone body after it is used');
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Check that body is a stream and not form-data object
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// note: we can't clone the form-data object without having it as a dependency
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if ((body instanceof Stream) && (typeof body.getBoundary !== 'function')) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		// Tee instance body
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		p1 = new PassThrough({highWaterMark});
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		p2 = new PassThrough({highWaterMark});
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		body.pipe(p1);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		body.pipe(p2);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		// Set instance body to teed body and return the other teed body
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		instance[INTERNALS].stream = p1;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		body = p2;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	return body;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> const getNonSpecFormDataBoundary = deprecate(
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	body => body.getBoundary(),
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	'form-data doesn\'t follow the spec and requires special treatment. Use alternative package',
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	'https://github.com/node-fetch/node-fetch/issues/1167'
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> );
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> /**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * Performs the operation "extract a `Content-Type` value from |object|" as
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * specified in the specification:
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * https://fetch.spec.whatwg.org/#concept-bodyinit-extract
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * This function assumes that instance.body is present.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @param {any} body Any options.body input
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @returns {string | null}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> function extractContentType(body, request) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is null or undefined
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (body === null) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is string
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (typeof body === 'string') {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return 'text/plain;charset=UTF-8';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is blob
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (isBlob(body)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return body.type || null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is a Buffer (Buffer, ArrayBuffer or ArrayBufferView)
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (Buffer.isBuffer(body) || types.isAnyArrayBuffer(body) || ArrayBuffer.isView(body)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is stream - can't really do much about this
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (body instanceof Stream) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body constructor defaults other things to string
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	return 'text/plain;charset=UTF-8';
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> /**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * The Fetch Standard treats this as if "total bytes" is a property on the body.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * For us, we have to explicitly get it with a function.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * ref: https://fetch.spec.whatwg.org/#concept-body-total-bytes
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @param {any} obj.body Body object from the Body instance.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @returns {number | null}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> function getTotalBytes(request) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	const {body} = request[INTERNALS];
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is null or undefined
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (body === null) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return 0;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is Blob
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (isBlob(body)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return body.size;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is Buffer
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (Buffer.isBuffer(body)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return body.length;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Detect form data input from form-data module
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (body && typeof body.getLengthSync === 'function') {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		return body.hasKnownLength && body.hasKnownLength() ? body.getLengthSync() : null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	// Body is stream
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	return null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> /**
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * Write a Body to a Node.js WritableStream (e.g. http.Request) object.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  *
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> * @param {Stream.Writable} dest The stream to write to.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @param obj.body Body object from the Body instance.
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  * @returns {Promise<void>}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>  */
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> async function writeToStream(dest, {body}) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	if (body === null) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		// Body is null
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		dest.end();
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	} else {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		// Body is stream
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 		await pipeline(body, dest);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 	}
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };                      
+                    </pre>            
+                </font>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

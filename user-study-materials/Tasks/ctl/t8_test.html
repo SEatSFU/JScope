@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+        <link rel="stylesheet" href="../style.css">
+
+    </head>
+	<body>
+        <table>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="description">
+                    <div>
+                        <span><b>Task 4.</b></span>
+                        <p>                            
+                            Clamscan is an open source Node.js tool for scanning files and directories for viruses.
+                            You can see a code fragment related to scanDir() function, 
+                            which asynchronously scans a directory and its subdirectories for viruses.
+                        </p>
+                        <p>
+                            Upon a call to scanDir(), Line 6 creates and returns a promise(let's call it p) that will scan all files
+                            and return an object containing the scanned files when it is resolved.
+                            The callback function for p tries to collect the names of all files in the given path (line 8), 
+                            and then passes the filenames to the scanFiles() function (line 9). scanFiles() scans an array of files, 
+                            and returns a promise that is resolved with an object, containing an array of goodFiles and viruses.
+                            If there is a problem in acquiring filenames, or scanning files, p will be rejected with an error,
+                            indicating the problem and error message (lines 11 to 14).
+                        </p>
+                        <p>
+                            We also inlcuded the test suite related to this code fragment.
+                            It contains two tests, testing success and failure scenarios of scanDir(), respectively.
+                            The success scenario tests a normal case where it is expected that scanDir() operates normally, 
+                            which is to scan a directory containing files and subdirectories and return a proper object.
+                            The failure scenario tests scanning a missing directory, which is supposed to throw an error.
+                            However, when executing the test suite, the first test case (success scenario)
+                            fails with no logs about the assertions, indicating that none of the expect() statements have been executed.
+                        </p>
+                        <p>
+                            <i>Can you explain what could have caused the issues?</i> *
+                        </p>
+                        <p>
+                            * It is ensured that scanFiles() and getAllFilenames() functions work as expected and are properly tested.
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="description">
+                    <div>
+                        <span><b>Source Code:</b></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <font size="+1">
+                    <?prettify linenums=1?>
+                    <pre class="prettyprint" lang-js>
+/**
+* @param {string} path - The directory to scan files of
+* @returns {Promise<object>} Object like: `{ goodFiles: Array, viruses: Array }`
+*/
+function scanDir(path = '') {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allFiles = getAllFilenames(path);
+            return scanFiles(allFiles);
+        } catch (e) {
+            const err = new Error(
+                `Could not read the file listing of the ${path}: ${e}`
+            );
+            return reject(err);
+        }
+    });
+}
+/**
+ * @param {String} path - a path to be scanned
+ * @returns {Promise<Array>}
+ */
+function getAllFilenames(path) { /*...*/ };
+
+/**
+ * @param {Array} files - A list of files or paths (full paths) to be scanned
+ * @returns {Promise<object>} Object like: `{ goodFiles: Array, viruses: Array }`
+ */
+async function scanFiles(files = []) { /*...*/ };
+                    </pre>            
+                </font>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="description">
+                    <div>
+                        <span><b>Tests:</b></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <font size="+1">
+                    <?prettify linenums=1?>
+                    <pre class="prettyprint" lang-js>
+describe('scanDir', () => {
+    before(async () => {
+        // initializes following directory structure:
+        //  - good_dir/
+        //     - sub_dir1/
+        //         - good_file1.txt
+        //         - good_file2.txt 
+        //     - sub_dir2/
+        //         - good_file3.txt 
+        initializeDirectories()
+    });
+
+    it('should support scanning a directory', () => {
+        scanDir(`${__dirname}/good_dir`).then((data) => {
+            expect(data.to.be.an('object'))
+            expect(data.goodFiles.to.be.an('array').that.is.not.empty)
+            expect(data.viruses.to.be.an('array').that.is.empty)
+        });
+    });
+
+    it('should return error if directory not found', () => {
+        expect(scanDir(`${__dirname}/missing_dir`)).to.be.rejectedWith(Error);
+    });
+
+});
+                    </pre>            
+                </font>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

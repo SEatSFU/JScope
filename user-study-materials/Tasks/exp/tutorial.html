@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+        <link rel="stylesheet" href="../style.css">
+
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <font size="+1">
+                    <?prettify linenums=1?>
+                    <pre class="prettyprint" lang-js>
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> const deleteDir = async (dirname, options = {}) => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     return <span class="tooltip"><span class="promise covered">new Promise</span><span class="nocode"><span class="tooltiptext">Promise fully covered.</span></span></span>((resolve, reject) => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         rimraf(dirname, { ...options, glob: false }, err => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         if (err) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>             reject(err);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         } else {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>             resolve();
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         });
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     })
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> const deleteEmpty = (cwd, options, cb) => {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     <span title="if path not taken" class = "nocode" style="background-color: rgba(255, 255, 100, 0.71); color:black">if (typeof cwd !== 'string')</span> {
+<span class="c-notcovered">&nbsp;&nbsp;&nbsp;</span>        <span title="statement not covered" style="background-color: rgba(255, 0, 0, .5)">return <span class="tooltip"><span class="promise uncovered">Promise.reject</span><span class="nocode"><span class="tooltiptext" style="text-align: left;">Promise fulfillment is not tested!<br>Promise rejection is not tested!</span></span></span>(new TypeError('expected the first argument to be a string'));</span>
+<span class="c-notcovered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     if (typeof options === 'function') {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>        cb = options;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>        options = null;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     if (typeof cb === 'function') {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>        return deleteEmpty(cwd, options)
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>            <span class="tooltip"><span class="promise covered">.then</span><span class="nocode"><span class="tooltiptext">Promise fully covered.</span></span></span>(res => cb(null, res))
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>            <span class="tooltip"><span class="promise covered">.catch</span><span class="nocode"><span class="tooltiptext">Promise fully covered.</span></span></span>(cb);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     const opts = options || {};
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     const dir = path.resolve(cwd);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     if (isEmpty(dir, opts)) {
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         let files = await <span class="tooltip"><span class="promise partiallycovered">readdir(dir)</span><span class="nocode"><span class="tooltiptext">Promise rejection not tested!</span></span></span>;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>         await <span class="tooltip"><span class="promise partiallycovered">deleteDir(dir, opts)</span><span class="nocode"><span class="tooltiptext">Promise rejection not tested!</span></span></span>;
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     }
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> 
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span>     return remove(dirname);
+<span class="code-covered">&nbsp;&nbsp;&nbsp;</span> };

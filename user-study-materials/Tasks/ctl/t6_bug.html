@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+        <link rel="stylesheet" href="../style.css">
+
+    </head>
+	<body>
+        <table>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="description">
+                    <div>
+                        <span><b>Task 3.1.</b></span>
+                        <p>
+                            Docusaurus is an open source application for building, deploying, and maintaining open source websites. 
+                            You can see a code fragment from the start-server.js file, responsible for starting the Docusaurus web server. 
+                            The code fragment is trying to determine whether some selected port on the machine is free and can be bound to. 
+                        </p>
+                        <p>
+                            Line 1 calls the check() function to determine the availability of the hostname and port. check() returns 
+                            a promise which we will refer to as p. At line 2, the program registers an anonymous function as the 
+                            fulfill reaction for p. The anonymous function is executed when p is fulfilled, i.e., the availability 
+                            of selected hostname and port is checked. If the address is in use, the program prints a descriptive error message 
+                            and exits, unable to start the server (lines 3&4). If the address is available, the program prints a message 
+                            to the console, declaring that it is starting the server (line 6). It then instantiates a server object and 
+                            starts the server locally on the specified port (lines 8&9). The anonymous fulfill reaction ends at line 11 
+                            with a running server.
+                        </p>
+                        <p>
+                            Executing this file, the user initially observes the two printed messages regarding 
+                            availability of the server's address and then starting it. 
+                            However, some users have reported an issue that in some cases the server prints that the server is starting, 
+                            but it doesn't start and nothing happens after that.
+                        </p>
+                        <p class="">
+                            <i>What do you think causes the issue?</i>
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>
+                    <font size="+1">
+                    <?prettify linenums=1?>
+                    <pre class="prettyprint" lang-js>
+tcpPortUsed.check(port, 'localhost')
+    .then(function(inUse) {
+	if (inUse) {
+		console.error(port + ' is in use');
+		process.exit(1);
+	} else {
+		console.log('Starting Docusaurus server on port ' + port + '...');
+		// start local server on specified port
+		var server = require('./server/server.js');
+		server(port);
+	}
+});
+                    </pre>            
+                </font>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
