@@ -107,7 +107,7 @@ export class Coverage {
             promiseMap = await this._handleLinkedPromiseSettlements(promiseMap)
             
             this._promiseMap = promiseMap
-            Logger.log(`> Promise map created: ${compactStringify(promiseMap, {maxLength: 200, indent: 2})}`)
+            // Logger.log(`> Promise map created: ${compactStringify(promiseMap, {maxLength: 200, indent: 2})}`)
         }
         
         // if(!!config?.query) {

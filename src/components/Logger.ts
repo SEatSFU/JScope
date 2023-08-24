@@ -10,7 +10,7 @@ const LOG_LEVEL = {
  */
 export default class Logger {
     private static _channel: vscode.OutputChannel;
-    private static _level: number;
+    private static _level: number = LOG_LEVEL.REPORT;
 
     public static init(channel: vscode.OutputChannel, level = LOG_LEVEL.REPORT) {
         Logger._channel = channel
@@ -23,7 +23,7 @@ export default class Logger {
      * Use for debugging purposes only
      */
     public static log(str: string): void {
-        if (this._level > LOG_LEVEL.DEBUG) return
+        if (Logger._level > LOG_LEVEL.DEBUG) return
         if(!Logger._channel) {
             return console.log(`DEBUG: ${str}`)
         }
@@ -47,7 +47,7 @@ export default class Logger {
      * Use for printing report or other information for production.
      */
     public static report(str: string) {
-        if (this._level > LOG_LEVEL.REPORT) return
+        if (Logger._level > LOG_LEVEL.REPORT) return
         if(!Logger._channel) {
             return console.log(str)
         }

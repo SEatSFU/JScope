@@ -2,6 +2,11 @@
 
 ## Getting Started
 
+You can either try out a dockerized version of JScope (Recommended), limited to its CLI-only version by following [`INSTALL.md`](docs/INSTALL.md). 
+You may also be able to run the full VScode extension using a VScode extension like [this one](https://code.visualstudio.com/docs/devcontainers/containers#_system-requirements), that provides the ability to develop inside a container.
+
+Or you can follow the guide below to install the dependencies on your own machine and then run JScope.
+
 1. Install global dependencies. To use JScope, you need these installed on your machine:
     - [Visual Studio Code](https://code.visualstudio.com/download)
     - [Typescript](https://www.typescriptlang.org/download)

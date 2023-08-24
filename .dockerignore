@@ -1,0 +1,11 @@
+node_modules
+bench.csv
+out
+.vscode-test
+async-coverage
+case-studies
+logs
+scripts
+jscope-anonymized.zip
+projects-RQ1/*/node_modules
+projects-RQ2/*/node_modules

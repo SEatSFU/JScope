@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# docker build --platform linux/x86_64 -t jscope:latest .
+# docker build -t jscope .
 docker stop jscope
 docker rm jscope
-docker run --platform linux/x86_64 -d --name jscope jscope:latest
+docker run -d --name jscope jscope
 docker exec -it jscope /bin/bash

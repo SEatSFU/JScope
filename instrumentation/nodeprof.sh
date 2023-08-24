@@ -8,7 +8,8 @@
 # More info at https://github.com/Haiyang-Sun/nodeprof.js/blob/master/README.md
 # If your default version of java is 1.8.0 then ignore this
 # javaHome="/Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk/Contents/Home"
-#javaHome="$HOME/.mx/jdks/labsjdk-ce-11-jvmci-22.2-b03/Contents/Home"
+# javaHome="$HOME/.mx/jdks/labsjdk-ce-11-jvmci-22.2-b03/Contents/Home"
+javaHome="/app/labsjdk-ce-17"
 
 nodeprof () { 
     if [ "$#" -lt "4" ]; then
@@ -35,8 +36,8 @@ nodeprof () {
     if test -d $javaHome; then
         export JAVA_HOME=$javaHome
     fi
-#    cmd="mx jalangi --excl=\"node_modules,internal,spec,chai,css,promiseWrapper.js,test\" --scope=app --analysis \"${analysis}\" \"${runner}\" \"${testDir}\" \"${regex}\""
-    cmd="$GRAAL_HOME/bin/node --jvm --experimental-options --vm.Dtruffle.class.path.append=$GRAAL_HOME/tools/nodeprof.jar --nodeprof \"$NODEPROF_PATH/src/ch.usi.inf.nodeprof/js/jalangi.js\" --analysis ${analysis} ${runner} --nodeprof.ExcludeSource=\"node_modules,internal,spec,chai,css,promiseWrapper.js,test\" --nodeprof.Scope=app ${testDir} ${regex}"
+    cmd="mx -v jalangi --excl=\"node_modules,internal,spec,chai,css,promiseWrapper.js,test\" --scope=app --analysis \"${analysis}\" \"${runner}\" \"${testDir}\" \"${regex}\""
+    # cmd="$GRAAL_HOME/bin/node --jvm --experimental-options --vm.Dtruffle.class.path.append=$GRAAL_HOME/tools/nodeprof.jar --nodeprof \"$NODEPROF_PATH/src/ch.usi.inf.nodeprof/js/jalangi.js\" --analysis ${analysis} ${runner} --nodeprof.ExcludeSource=\"node_modules,internal,spec,chai,css,promiseWrapper.js,test\" --nodeprof.Scope=app ${testDir} ${regex}"
     echo -e "$cmd"
     if [ "$#" -eq "5" ]; then
         eval "$cmd" | tee "${5}"
