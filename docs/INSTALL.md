@@ -6,6 +6,22 @@
 A Dockerfile is provided to run the project in an isolated container along with all of its dependencies.
 The only requirement is having Docker installed on your machine.
 
+> Note: The projects used for RQ1 experiments are included in the projects-RQ1 zip file. Please first unzip this file into a directory called `projects-RQ1` and continue with the rest of the guide.
+
+After unzipping, the directory structure should look like this:
+```
+Jscope
+|-- projects-RQ1
+|   |-- avvio
+|   |-- minipass
+|   |-- matched
+|   |-- ...
+|-- src
+|-- ...
+```  
+
+
+
 ## Installation
 
 Run the following command in the root project directory to build the `jscope` docker image
