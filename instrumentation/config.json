@@ -1,0 +1,786 @@
+{
+    "beforeOrAfter": "after",
+    "baseCmd": "PATH_TO_JSCOPE_DIR/instrumentation/run_test_framework.sh",
+    "analysis": "PATH_TO_JSCOPE_DIR/instrumentation/src/analysis.js",
+    "srcBaseDir": "PATH_TO_JSCOPE_DIR",
+    "benchmarkBaseDir": "PATH_TO_JSCOPE_DIR/benchmark_projects/",
+    "logDir": "PATH_TO_JSCOPE_DIR/instrumentation/logs/",
+    "projects": {
+        "node-oauth2-server": {
+            "name": "node-oauth2-server",
+            "url": "https://github.com/oauthjs/node-oauth2-server",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*_test.js",
+            "before": "",
+            "after": "6d4c98794bc024a8cf93cf9e79f92f93766da9f4",
+            "comment": "uses bluebird and promisify-any"
+        },
+        "node-fetch": {
+            "name": "node-fetch",
+            "url": "https://github.com/node-fetch/node-fetch",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "2d5399ed5605fb1b2e887f6e7953bc02e6194d52",
+            "after": "6e4c1e4f67b7b6b8de13bbbf88991894dc003245"
+        },
+        "honoka": {
+            "name": "honoka",
+            "url": "https://github.com/kokororin/honoka",
+            "testScript": "npm run test:node",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.mjs",
+            "before": "",
+            "after": "6c6ed2a3c12b5694ceea60313b9c4569800d3cbd"
+        },
+        "controlled-promise": {
+            "name": "controlled-promise",
+            "url": "https://github.com/vitalets/controlled-promise",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "",
+            "after": "a218f8206e7aadb7521e0c8273f4d9739f960109"
+        },
+        "cacache": {
+            "name": "cacache",
+            "url": "https://github.com/npm/cacache",
+            "testScript": "tap test/*.js",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "5488bcb577a81e486d93b69e8a58b2a35dc47cb5",
+            "after": "11f05c04b2979ac7aa8d1afb6f8a8aa3c7967e95",
+            "comment": "run alone to see what's wrong."
+        },
+        "call-limit": {
+            "name": "call-limit",
+            "url": "https://github.com/iarna/call-limit",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "2b05fe72f0cf33a2aac951cd68dd949fccb0d9e9",
+            "after": "351a13e68f149c9891b51bfc13effd61508c2042"
+        },
+        "co": {
+            "name": "co",
+            "url": "https://github.com/tj/co",
+            "testScript": "npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "987d642f8f26794e3ff13c1fe25f90b5d631d896",
+            "after": "efbcf13f8f9259728c3477a988977fa3c3d08e6c",
+            "comment": "needs manual running of code coverage."
+        },
+        "enquirer": {
+            "name": "enquirer",
+            "url": "https://github.com/enquirer/enquirer",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "f49895f2d84bf24fd0e2706da1eca0be3303bc29",
+            "after": "cc22e14368a9883faa16ddc5f69483ffbe827d6d"
+        },
+        "EventEmitter2": {
+            "name": "EventEmitter2",
+            "url": "https://github.com/EventEmitter2/EventEmitter2",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "52dd69192cfb9aae5e18a0931b09378dafd35cbd",
+            "after": "7dff2d6a160a636046921256fa4eef9025ae4bf8",
+            "comment": "Needs Tweaking... Error: ENOENT: no such file or directory, scandir './test' at Object.readdirSync (fs.js:1021:3)"
+        },
+        "install": {
+            "name": "install",
+            "url": "https://github.com/benjamn/install",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "8e420c4b31bdaf43d0a580a5f15b1525dd4b71aa",
+            "after": "ed1a8038c921d2bf5ec009e356ff761803fb9f47",
+            "comment": "stack overflow error, try finding and removing a test case if a good project."
+        },
+        "avvio": {
+            "name": "avvio",
+            "url": "https://github.com/fastify/avvio",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*test.js",
+            "before": "",
+            "after": "af141dea95f501c43a03aebc14152dae9f082440"
+        },
+        "delete-empty": {
+            "name": "delete-empty",
+            "url": "https://github.com/jonschlinkert/delete-empty",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "test.js",
+            "before": "",
+            "after": "79cfda0161bac7f3d55d9ceac256216c17283a51"
+        },
+        "environment": {
+            "name": "environment",
+            "url": "https://github.com/yeoman/environment",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "3b2f61912c15d1282a7195f7b4a37c3e50347010",
+            "comment": "timed out"
+        },
+        "get-folder-size": {
+            "name": "get-folder-size",
+            "url": "https://github.com/alessioalex/get-folder-size",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": "17e17f64106d4557f4e99464f3479e26c65c391b",
+            "comment": "es6 import error stuff in STDERR"
+        },
+        "ignore-walk": {
+            "name": "ignore-walk",
+            "url": "https://github.com/npm/ignore-walk",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": "9291ce1e30cecadb31f446e94b14578e6bfb7eca",
+            "comment": "has post test script that errors."
+        },
+        "json-schema-ref-parser": {
+            "name": "json-schema-ref-parser",
+            "url": "https://github.com/APIDevTools/json-schema-ref-parser",
+            "testFramework": "mocha",
+            "testSubDir": "tests",
+            "testScript": "npm run test:node",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": "",
+            "comment": "timed out"
+        },
+        "json-schema-ref-parser2": {
+            "name": "json-schema-ref-parser",
+            "url": "https://github.com/APIDevTools/json-schema-ref-parser",
+            "testFramework": "mocha",
+            "testSubDir": "tests",
+            "testScript": "npm run test:node",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": "",
+            "comment": "timed out"
+        },
+        "kareem": {
+            "name": "kareem",
+            "url": "https://github.com/vkarpov15/kareem",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "",
+            "after": "558a6e6e73c0430628da8e45c5eb408ae9ce14cb"
+        },
+        "koa-views": {
+            "name": "koa-views",
+            "url": "https://github.com/queckezz/koa-views",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "e7b8e4d50160a94ccc9eef2d4fe6488d297b5dde"
+        },
+        "lgtm": {
+            "name": "lgtm",
+            "url": "https://github.com/square/lgtm",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*_test.js",
+            "before": "",
+            "after": "a404266b15220cc5591ae9014432cd7a53997f87",
+            "comment": "es6 import error stuff"
+        },
+        "libnpmpublish": {
+            "name": "libnpmpublish",
+            "url": "https://github.com/npm/libnpmpublish",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "e45d51c357705bfd596cbef661b95bd59c7e629e"
+        },
+        "libnpmteam": {
+            "name": "libnpmteam",
+            "url": "https://github.com/npm/libnpmteam",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "f2794edcc88784bef0b9ad68e29c11e3a51e83b6"
+        },
+        "matched": {
+            "name": "matched",
+            "url": "https://github.com/jonschlinkert/matched",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "453de2184524425a3b859aaeb2b207446f110e99"
+        },
+        "socketcluster-server": {
+            "name": "socketcluster-server",
+            "url": "https://github.com/SocketCluster/socketcluster-server",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "ea2175a4d8548ca14bd9b5e7ad2cd3e94d70bc40"
+        },
+        "socketcluster-server2": {
+            "name": "socketcluster-server2",
+            "url": "https://github.com/SocketCluster/socketcluster-server",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "ea2175a4d8548ca14bd9b5e7ad2cd3e94d70bc40"
+        },
+        "socketcluster-client": {
+            "name": "socketcluster-client",
+            "url": "https://github.com/SocketCluster/socketcluster-client",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "e979c7ec308aeb74e66b3d0f7939e33d7a077b7d"
+        },
+        "systemjs": {
+            "name": "systemjs",
+            "url": "https://github.com/systemjs/systemjs",
+            "testScript":"npm run test:node",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "",
+            "after": "949272a2a44f594d5b3dfdd7448f32245dfb3f1e"
+        },
+        "clamscan": {
+            "name": "clamscan",
+            "url": "https://github.com/kylefarris/clamscan",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "tests",
+            "testRegex": "**/*.js",
+            "before": "42236a9ccc9b8653f7d28d40c2728709ba5b9d00",
+            "after": "dfbafbfde65cc7f11f901a46fae95f261b3b6049"
+        },
+        "ioredis": {
+            "name": "ioredis",
+            "url": "https://github.com/TysonAndre/ioredis.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.ts",
+            "before": "2ee877eccdbac544856cd9969ada35805ca033cd",
+            "after": "946efee2f983ecf4e10d002d1a535d32354aab89"
+        },
+        "ioredis2": {
+            "name": "ioredis",
+            "url": "https://github.com/TysonAndre/ioredis.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.ts",
+            "before": "2ee877eccdbac544856cd9969ada35805ca033cd",
+            "after": "946efee2f983ecf4e10d002d1a535d32354aab89"
+        },
+        "cla-assistant": {
+            "name": "cla-assistant",
+            "url": "https://github.com/cla-assistant/cla-assistant.git",
+            "testScript":"npm run test:mocha",
+            "testFramework": "mocha",
+            "testSubDir": "src/tests/server",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": ""
+        },
+        "cla-assistant2": {
+            "name": "cla-assistant2",
+            "url": "https://github.com/cla-assistant/cla-assistant.git",
+            "testScript":"npm run test:mocha",
+            "testFramework": "mocha",
+            "testSubDir": "src/tests/server",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": ""
+        },
+        "cla-assistant3": {
+            "name": "cla-assistant3",
+            "url": "https://github.com/cla-assistant/cla-assistant.git",
+            "testScript":"npm run test:mocha",
+            "testFramework": "mocha",
+            "testSubDir": "src/tests/server",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": ""
+        },
+        "audit-ci": {
+            "name": "audit-ci",
+            "url": "https://github.com/IBM/audit-ci.git",
+            "testScript":"npm run test:mocha",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.spec.js",
+            "before": "bcd09e5d955ffd7ee87ed7a3fb8ff927ebb05df1",
+            "after": "552f4802ef704ccea69e9fab1d194470f766b876"
+        },
+        "node-homey-lib": {
+            "name": "node-homey-lib",
+            "url": "https://github.com/athombv/node-homey-lib.git",
+            "testScript":"npm run test:mocha",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "f88402103807ad1eea14d37cdce3b8c21d507d08",
+            "after": "aabd5752a82acb3ca63dce121eca57ce46808ff5"
+        },
+        "fastify": {
+            "name": "fastify",
+            "url": "https://github.com/fastify/fastify.git",
+            "testScript":"npm run unit",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "3ebbe27441e3b1c4b77e59f14b40f4062d1a8780",
+            "after": "ea6272ec5d66d8d3caa5b9c2be0989cd52adb732"
+        },
+        "fabric-sdk-node": {
+            "name": "fabric-sdk-node",
+            "url": "https://github.com/hyperledger/fabric-sdk-node.git",
+            "testScript":"npm run unitTest",
+            "testFramework": "mocha",
+            "testSubDir": ".",
+            "testRegex": "**/test/**/*.js",
+            "before": "3ebbe27441e3b1c4b77e59f14b40f4062d1a8780",
+            "after": "ea6272ec5d66d8d3caa5b9c2be0989cd52adb732"
+        },
+        "bot": {
+            "name": "bot",
+            "url": "https://github.com/lnp2pBot/bot.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "tests",
+            "testRegex": "**/*_test.js",
+            "before": "85a7ee17cd8e7e46c42a997d5dd2c25eaffa3133",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5",
+            "comment": "some kind of error with WebAssembly"
+        },
+        "amqp-delegate": {
+            "name": "amqp-delegate",
+            "url": "https://github.com/davesag/amqp-delegate.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "85a7ee17cd8e7e46c42a997d5dd2c25eaffa3133",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "jose-simple": {
+            "name": "jose-simple",
+            "url": "https://github.com/davesag/jose-simple.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "85a7ee17cd8e7e46c42a997d5dd2c25eaffa3133",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "ir-api": {
+            "name": "ir-api",
+            "url": "https://github.com/davesag/ir-api.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "85a7ee17cd8e7e46c42a997d5dd2c25eaffa3133",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "node-tesla-api": {
+            "name": "node-tesla-api",
+            "url": "https://github.com/davesag/node-tesla-api.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "85a7ee17cd8e7e46c42a997d5dd2c25eaffa3133",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "amqp-simple-pub-sub": {
+            "name": "amqp-simple-pub-sub",
+            "url": "https://github.com/davesag/amqp-simple-pub-sub.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "85a7ee17cd8e7e46c42a997d5dd2c25eaffa3133",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "wikiscores": {
+            "name": "wikiscores",
+            "url": "https://github.com/davesag/wikiscores.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "85a7ee17cd8e7e46c42a997d5dd2c25eaffa3133",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "express-http-proxy": {
+            "name": "express-http-proxy",
+            "url": "https://github.com/villadora/express-http-proxy.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "3baf9793b341596c7fa51eb1117949131efc4fbb",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "express-http-proxy2": {
+            "name": "express-http-proxy2",
+            "url": "https://github.com/villadora/express-http-proxy.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "3baf9793b341596c7fa51eb1117949131efc4fbb",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "promise-coverage-tests": {
+            "name": "promise-coverage-tests",
+            "url": "",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "spec",
+            "testRegex": "**/*promiseThen.test.js",
+            "before": "3baf9793b341596c7fa51eb1117949131efc4fbb",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "minipass-fetch": {
+            "name": "minipass-fetch",
+            "url": "https://github.com/npm/minipass-fetch.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "3baf9793b341596c7fa51eb1117949131efc4fbb",
+            "after": "7ea10724b1f5c9f8a6db18abffa49e2ae9be55a5"
+        },
+        "minipass": {
+            "name": "minipass",
+            "url": "https://github.com/isaacs/minipass.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": ""
+        },
+        "npm-registry-fetch": {
+            "name": "npm-registry-fetch",
+            "url": "https://github.com/npm/npm-registry-fetch.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": ""
+        },
+        "grant": {
+            "name": "grant",
+            "url": "https://github.com/simov/grant",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": ""
+        },
+        "arborist": {
+            "name": "arborist",
+            "url": "https://github.com/npm/arborist.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test/arborist",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": "",
+            "comment": "Project needs a lot of modifications for nodeprof + JScope doesnt completely execute"
+        },
+        "warehouse.ai": {
+            "name": "warehouse.ai",
+            "url": "https://github.com/godaddy/warehouse.ai.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "",
+            "after": "",
+            "comment": "tests have low coverage"
+        },
+        "async-cache-dedupe": {
+            "name": "async-cache-dedupe",
+            "url": "https://github.com/mcollina/async-cache-dedupe.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "",
+            "after": ""
+        },
+        "github-action-merge-dependabot": {
+            "name": "github-action-merge-dependabot",
+            "url": "https://github.com/fastify/github-action-merge-dependabot.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.test.js",
+            "before": "",
+            "after": ""
+        },
+        "undici": {
+            "name": "undici",
+            "url": "https://github.com/nodejs/undici.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "**/*.js",
+            "before": "",
+            "after": "",
+            "comment": "Error: async hook stack has become corrupted! graal.js fails"
+        },
+        "wechaty": {
+            "name": "wechaty",
+            "url": "https://github.com/wechaty/wechaty.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "src",
+            "testRegex": "**/*.spec.ts",
+            "before": "",
+            "after": "",
+            "comment": "can't run tap with ts"
+        },
+        "artillery": {
+            "name": "artillery",
+            "url": "https://github.com/artilleryio/artillery.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test/unit",
+            "testRegex": "**/*.test.js",
+            "before": "",
+            "after": "",
+            "comment": "very low coverage."
+        },
+        "auth": {
+            "name": "auth",
+            "url": "https://github.com/mercurius-js/auth.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": ""
+        },
+        "ack-p": {
+            "name": "ack-p",
+            "url": "https://github.com/AckerApple/ack-p.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "tests",
+            "testRegex": "test-ack-p.js",
+            "before": "",
+            "after": "",
+            "comment": "another implementation of promises, gets deep in usage of promise. results are not useful."
+        },
+        "cachegoose": {
+            "name": "cachegoose",
+            "url": "https://github.com/boblauer/cachegoose.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "index.js",
+            "before": "",
+            "after": ""
+        },
+        "node-vpn-gate": {
+            "name": "node-vpn-gate",
+            "url": "https://github.com/alnn/node-vpn-gate",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": "",
+            "comment": "uses bluebird"
+        },
+        "quoting-service": {
+            "name": "quoting-service",
+            "url": "https://github.com/mojaloop/quoting-service.git",
+            "testScript":"npm run test",
+            "testFramework": "jest",
+            "testSubDir": "scripts",
+            "testRegex": "test-all.js",
+            "before": "",
+            "after": "",
+            "comment": ""
+        },
+        "scratch-vm": {
+            "name": "scratch-vm",
+            "url": "https://github.com/xcratch/scratch-vm.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "test",
+            "testRegex": "unit/*.js",
+            "before": "",
+            "after": ""
+        },
+        "node-minecraft-protocol": {
+            "name": "node-minecraft-protocol",
+            "url": "https://github.com/PrismarineJS/node-minecraft-protocol.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "clientTest.js",
+            "before": "",
+            "after": ""
+        },
+        "postgres": {
+            "name": "postgres",
+            "url": "https://github.com/porsager/postgres.git",
+            "testScript":"npm run test",
+            "testFramework": "tap",
+            "testSubDir": "tests",
+            "testRegex": "index.js",
+            "before": "",
+            "after": ""
+        },
+        "attack-workbench-rest-api": {
+            "name": "attack-workbench-rest-api",
+            "url": "https://github.com/center-for-threat-informed-defense/attack-workbench-rest-api.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "app/tests",
+            "testRegex": "**/*.spec.js",
+            "before": "",
+            "after": ""
+        },
+        "playkit-js-hls": {
+            "name": "playkit-js-hls",
+            "url": "https://github.com/kaltura/playkit-js-hls.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test/src",
+            "testRegex": "*.spec.js",
+            "before": "",
+            "after": "",
+            "comment": "needs frontend karma"
+        },
+        "pulsar-flex": {
+            "name": "pulsar-flex",
+            "url": "https://github.com/ayeo-flex-org/pulsar-flex",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*-spec.js",
+            "before": "",
+            "after": "",
+            "comment": "needs docker, takes long, needs lots of modification for nodeprof"
+        },
+        "node-odbc": {
+            "name": "node-odbc",
+            "url": "https://github.com/ayeo-flex-org/pulsar-flex",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "**/*-spec.js",
+            "before": "",
+            "after": "",
+            "comment": ""
+        },
+        "haraka-plugin-fcrdns": {
+            "name": "haraka-plugin-fcrdns",
+            "url": "https://github.com/haraka/haraka-plugin-fcrdns.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": ""
+        },
+        "haraka-plugin-limit": {
+            "name": "haraka-plugin-limit",
+            "url": "https://github.com/haraka/haraka-plugin-limit.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*.js",
+            "before": "",
+            "after": ""
+        },
+        "checkfire": {
+            "name": "checkfire",
+            "url": "https://github.com/open-climate-tech/checkfire.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "server-src/test",
+            "testRegex": "*.test.js",
+            "before": "",
+            "after": ""
+        },
+        "ffmpeg.wasm": {
+            "name": "ffmpeg.wasm",
+            "url": "https://github.com/ffmpegwasm/ffmpeg.wasm",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "tests",
+            "testRegex": "*.test.js",
+            "before": "",
+            "after": ""
+        },
+        "ssh2-sftp-client": {
+            "name": "ssh2-sftp-client",
+            "url": "https://github.com/theophilusx/ssh2-sftp-client.git",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "tests",
+            "testRegex": "*.test.js",
+            "before": "",
+            "after": "",
+            "comment": "needs some env vars, hard to config, no docs."
+        },
+        "streamroller": {
+            "name": "streamroller",
+            "url": "https://github.com/log4js-node/streamroller",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*-test.js",
+            "before": "",
+            "after": "",
+            "comment": ""
+        },
+        "eslint_d.js": {
+            "name": "eslint_d.js",
+            "url": "https://github.com/mantoni/eslint_d.js",
+            "testScript":"npm run test",
+            "testFramework": "mocha",
+            "testSubDir": "test",
+            "testRegex": "*-test.js",
+            "before": "",
+            "after": "",
+            "comment": ""
+        }
+
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "nodeprof_path": "/app/nodeprof.js",
+    "default_test_framework": "mocha",
+    "default_test_subdir": "test",
+    "default_test_regex": "*test*" 
+}

@@ -1,0 +1,32 @@
+{
+	"fonts": [
+		{
+			"id": "async-coverage-icons",
+			"src": [
+				{
+					"path": "./async-coverage.woff",
+					"format": "woff"
+				}
+			],
+			"weight": "normal",
+			"style": "normal"
+		}
+	],
+	"iconDefinitions": {
+		"organization-filled": { // f-alphabet
+			"fontCharacter": "\\e000"
+		},
+		"organization-outline": { // r-alphabet
+			"fontCharacter": "\\e001"
+		},
+        "star-full": {
+			"fontCharacter": "\\e002"
+		},
+        "star-half": {
+			"fontCharacter": "\\e003"
+		},
+        "star-empty": {
+			"fontCharacter": "\\e004"
+		}
+	}
+}
